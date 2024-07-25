@@ -15,13 +15,14 @@ public sealed class Product : AggregateRoot, IAuditable
     /// <param name="description">The description of the product.</param>
     /// <param name="price">The price of the product.</param>
     /// <param name="stock">The stock of the product.</param>
-    private Product(string name, string description, decimal price, int stock)
+    private Product(string name, string description, decimal price, int stock, List<string> tages)
         : base(Guid.NewGuid())
     {
         Name = name;
         Description = description;
         Price = price;
         Stock = stock;
+        Tags = tages;
     }
     
     /// <summary>
@@ -50,6 +51,11 @@ public sealed class Product : AggregateRoot, IAuditable
     public int Stock { get; private set; }
 
     /// <summary>
+    /// Gets or Sets the Tages of product.
+    /// </summary>
+    public List<string> Tags { get; private set; } = new();
+
+    /// <summary>
     /// Gets or Sets the created Date Time of product.
     /// </summary>
     public DateTime CreatedOnUtc { get; set; }
@@ -67,9 +73,9 @@ public sealed class Product : AggregateRoot, IAuditable
     /// <param name="price">The price of product.</param>
     /// <param name="stock">The stock of product.</param>
     /// <returns>The new Instance of the <see cref="Product"/> class.</returns>
-    public static Product Create(string name, string description, decimal price, int stock)
+    public static Product Create(string name, string description, decimal price, int stock, List<string> tages)
     {
-        Product product = new Product(name, description, price, stock);
+        Product product = new Product(name, description, price, stock, tages);
 
         // Raise Domain Event.....
         product.RaiseDomainEvent(new ProductUpdatedDomainEvent(product.Id, product.Name, product.Description, product.Price, product.Stock));

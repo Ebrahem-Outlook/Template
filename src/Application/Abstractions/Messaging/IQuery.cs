@@ -3,12 +3,12 @@ using MediatR;
 
 namespace Application.Abstractions.Messaging;
 
-public interface ICommand : IRequest
+public interface IQuery : IRequest
 {
 
 }
 
-public interface ICommand<TResponse> : IRequest<TResponse>
+public interface IQuery<TResponse> : IRequest<TResponse>
     where TResponse : Result
 {
 

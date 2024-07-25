@@ -1,3 +1,7 @@
+using Carter;
+using Marten;
+using Presentation;
+
 namespace WebApi;
 
 public class Program
@@ -6,16 +10,19 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddAuthorization();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddMarten(options =>
+        {
+            options.Connection(builder.Configuration.GetConnectionString("Docker-Postgers")!);
+        });
+
+        builder.Services.AddCarter();
+
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -23,10 +30,6 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
-
 
         app.Run();
     }

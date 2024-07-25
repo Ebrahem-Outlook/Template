@@ -3,6 +3,21 @@ version: '3.4'
 services:
   webapi:
     image: ${DOCKER_REGISTRY-}webapi
+    container_name: WebApi
     build:
       context: .
       dockerfile: WebApi/Dockerfile
+    depends_on:
+      - template-db
+
+  template-db:
+    image: postgres:latest
+    container_name: Docker-Postgres
+    environment:
+      - POSTGRES_DB="template"
+      - POSTGRES_USER="postgres"
+      - POSTGRES_PASSWORD="postgres"
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
